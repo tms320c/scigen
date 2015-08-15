@@ -269,7 +269,7 @@ sub get_system_name {
     # how about some effects?
     my $rand = rand;
     if( $rand < .1 ) {
-	$name = "{\\em $name}";
+	$name = "<em>$name</em>";
     } elsif( length($name) <= 6 and $rand < .4 ) {
 	$name = uc($name);
     }

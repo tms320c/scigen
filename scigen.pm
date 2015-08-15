@@ -176,17 +176,16 @@ sub pretty_print {
 	$line =~ s/(\s+)([\.\,\?\;\:])/$2/g; # remove spaces before the punctuation
 	$line =~ s/(\b)(a)\s+([aeiou])/$1$2n $3/gi; # replace 'a' to 'an' before vowels
 
-	if( $line =~ /(.*) = {(.*)}\,/ ) {
-	    my $label = $1;
+	if( $line =~ /(.*)\({(.*)}\)(.*)/ ) {
 	    my $curr = $2;
 	    # place brackets around any words containing capital letters
-	    $curr =~ s/\b([^\s]*[A-Z]+[^\s\:]*)\b/\{$1\}/g;
-	    $newline = "$label = {" . 
+	    $curr = "<strong>" . 
 	      Autoformat::autoformat( $curr, { case => 'highlight',
 					       squeeze => 0  } );
-	    chomp $newline;
-	    chomp $newline;
-	    $newline .= "},";
+	    chomp $curr;
+	    chomp $curr;
+	    $curr .= "</strong>";
+		$newline = $1 . $curr . $3;
 	} elsif( $line =~ /\S/ ) {
 	    $newline = 
 	      Autoformat::autoformat( $line, { case => 'sentence', 
@@ -195,7 +194,7 @@ sub pretty_print {
 					       ignore => qr/^\s*</ } );
 	}
 
-	$newline =~ s/(\$)(.+)(\$)/$1$1$2$3$3/;
+	$newline =~ s/(\$)(.+)(\$)/$1$1$2$3$3/g;
 
 	if( $newline !~ /\n$/ ) {
 	    $newline .= "\n";
