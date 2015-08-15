@@ -123,7 +123,7 @@ sub compute_re {
     # must sort; order matters, and we want to make sure that we get
     # the longest matches first
     my ($rules, $RE) = @_;
-    my $in = join "|", sort { length ($b) <=> length ($a) } keys %$rules;
+    my $in = join "|", sort { length ($b) <=> length ($a) } keys %$rules; # sort numerically descending
     $$RE = qr/^(.*?)(${in})/s ;
 
 }

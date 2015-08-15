@@ -134,9 +134,9 @@ if( defined $title ) {
     my @a = ($title);
     $html_dat->{"SCI_TITLE"} = \@a;
 }
-my $tex = scigen::generate ($html_dat, $start_rule, $html_RE, 0, 1);
+my $html_text = scigen::generate ($html_dat, $start_rule, $html_RE, 0, 1);
 open( MAIN_HTML, ">$html_file" ) or die( "Couldn't open $html_file for writing" );
-print MAIN_HTML $tex;
+print MAIN_HTML $html_text;
 close( MAIN_HTML );
 
 # for every figure you find in the file, generate a figure
