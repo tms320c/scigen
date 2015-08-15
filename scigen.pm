@@ -173,38 +173,16 @@ sub pretty_print {
 
 	my $newline = "";
 
-	$line =~ s/(\s+)([\.\,\?\;\:])/$2/g;
-	$line =~ s/(\b)(a)\s+([aeiou])/$1$2n $3/gi;
+	$line =~ s/(\s+)([\.\,\?\;\:])/$2/g; # remove spaces before the punctuation
+	$line =~ s/(\b)(a)\s+([aeiou])/$1$2n $3/gi; # replace 'a' to 'an' before vowels
 
-	if( $line =~ /\\section(\*?){(.*)}/ ) {
-	    $newline = "\\section${1}{" . 
-	      Autoformat::autoformat( $2, { case => 'highlight', 
-					    squeeze => 0 } );
-	    chomp $newline;
-	    chomp $newline;
-	    $newline .= "}";
-	} elsif( $line =~ /(\\subsection){(.*)}/ or 
-		 $line =~ /(\\slideheading){(.*)}/ ) {
-	    $newline = $1 . "{" . 
-	      Autoformat::autoformat( $2, { case => 'highlight', 
-					    squeeze => 0 } );
-	    chomp $newline;
-	    chomp $newline;
-	    $newline .= "}";
-	} elsif( $line =~ /\\title{(.*)}/ ) {
-	    $newline = "\\title{" . 
-	      Autoformat::autoformat( $1, { case => 'highlight', 
-					    squeeze => 0  } );
-	    chomp $newline;
-	    chomp $newline;
-	    $newline .= "}";
-	} elsif( $line =~ /(.*) = {(.*)}\,/ ) {
+	if( $line =~ /(.*) = {(.*)}\,/ ) {
 	    my $label = $1;
 	    my $curr = $2;
 	    # place brackets around any words containing capital letters
 	    $curr =~ s/\b([^\s]*[A-Z]+[^\s\:]*)\b/\{$1\}/g;
 	    $newline = "$label = {" . 
-	      Autoformat::autoformat( $curr, { case => 'highlight', 
+	      Autoformat::autoformat( $curr, { case => 'highlight',
 					       squeeze => 0  } );
 	    chomp $newline;
 	    chomp $newline;
@@ -213,11 +191,11 @@ sub pretty_print {
 	    $newline = 
 	      Autoformat::autoformat( $line, { case => 'sentence', 
 					       squeeze => 0, 
-					       break => break_latex(),
-					       ignore => qr/^\\/ } );
+						   right => 1200,
+					       ignore => qr/^\s*</ } );
 	}
 
-	$newline =~ s/\\Em/\\em/g;
+	$newline =~ s/(\$)(.+)(\$)/$1$1$2$3$3/;
 
 	if( $newline !~ /\n$/ ) {
 	    $newline .= "\n";
@@ -229,13 +207,6 @@ sub pretty_print {
     return $news;
 }
 
-sub break_latex($$$) {
-    my ($text, $reqlen, $fldlen) = @_;
-    if( !defined $text ) {
-	$text = "";
-    }
-    return { $text, "" };
-}
 
 sub expand {
     my ($rules, $start, $RE, $debug) = @_;
