@@ -109,8 +109,8 @@ if( defined $options{"talk"} ) {
     $html_fh = new IO::File ("<talkrules-h.in");
     $start_rule = "SCITALK_HTML";
 } else {
-    $html_fh = new IO::File ("<scirules-h.in");
-    $start_rule = "SCIPAPER_HTML";
+    $html_fh = new IO::File ("<fxrules-h.in");
+    $start_rule = "FXPAPER_HTML";
 }
 
 my @a = ($sysname);
